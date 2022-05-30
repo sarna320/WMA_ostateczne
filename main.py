@@ -112,8 +112,9 @@ def licz(obraz,obraz_zloty,obraz_srebny):
     if circles is not None:
         circles = np.uint16(np.around(circles))
         for i in circles[0, :]:
-            #rysowanie kolek dla wszystkich
-            cv2.circle(obraz, (i[0], i[1]), i[2], (0, 255, 0), 2)
+            if i[2]!=28:
+                #rysowanie kolek dla wszystkich
+                cv2.circle(obraz, (i[0], i[1]), i[2], (0, 255, 0), 2)
 
             #dla 1 gr
             if i[2]==27:
@@ -149,7 +150,8 @@ def licz(obraz,obraz_zloty,obraz_srebny):
                             fontScale=0.5,
                             color=(0, 255, 0), thickness=1)
                 suma=suma+5.0
-
+                #specjalnie inne dla 5 zl
+                cv2.circle(obraz, (i[0], i[1]), 44, (0, 255, 0), 2)
 
     #znalezienie srebnych monet
     circles1 = cv2.HoughCircles(thresh_srebny, cv2.HOUGH_GRADIENT, 1, 100, param1=300, param2=10, minRadius=25, maxRadius=45)
