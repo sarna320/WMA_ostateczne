@@ -11,7 +11,7 @@ def zwrocObrazGithub(i):
            "https://github.com/sarna320/WMA_ostateczne/blob/dziala/mix2.jpg?raw=true",
            "https://github.com/sarna320/WMA_ostateczne/blob/dziala/srebne.jpg?raw=true"]
 
-    # wgranie zdjeciaa
+    # wgranie zdjecia
     url_response = urllib.request.urlopen(url[i])
 
     # przekonwertowanie zdjecia do formatu odowiedniego dla opencv
@@ -30,7 +30,7 @@ def drukujObraz(nazwa,obraz):
     cv2.waitKey()
     cv2.destroyAllWindows()
 "---------------------------------------------------------------------------------------------------------------------"
-#funckja zwraca obraz z wszystkimi wykrytymi nominalami na zdjecie, gdzie tlo zamieniane jest na czarny kolor
+#funckja zwraca obraz z wszystkimi wykrytymi nominalami na zdjeciu, gdzie tlo zamieniane jest na czarny kolor
 #argumentem wejsciowym jest obraz z monetami
 def wszyskieNominaly(obraz):
     # konwersja na skale szarosci
@@ -79,7 +79,8 @@ def rodziel(obraz):
     #trzeba sprawdzic czy wogole znalazlo zlote monety.
     """W tym miejscu byl dosyc spory problem, mianowicie dla najnowszej wersji pythona byl blad ze wartosc ufunc w petli
     for nie moga byc typu None, chociaz ten warunek byl sprawdzany, takie rozwiazanie bylo proponowane na stronie 
-    dokumentacji opencv. Problem ten zostal rozwiazany po przez uzycie starszej wersji pythona, np. na 3.6 dziala
+    dokumentacji opencv. Problem ten zostal rozwiazany po przez uzycie starszej wersji pythona, np. na 3.6 dziala. 
+    Problem ten probowalem rozwiazac innymi metodami, ale zadna z nich nie skutkowala.
     https://docs.opencv.org/3.4/d4/d70/tutorial_hough_circle.html"""
     if circles is not None:
         circles= np.uint16(np.around(circles))  # potrzebne bo kod nie dziala
@@ -97,8 +98,11 @@ def licz(obraz,obraz_zloty,obraz_srebny):
 
     # konwersja na skale szarosci
     gray_srebny = cv2.cvtColor(obraz_srebny, cv2.COLOR_BGR2GRAY)
-    thresh_srebny= cv2.adaptiveThreshold(gray_srebny, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C, cv2.THRESH_BINARY, 101,-10)
     gray_zloty = cv2.cvtColor(obraz_zloty, cv2.COLOR_BGR2GRAY)
+
+    """dodatkowo zastosowalem adaptive thresh poniewaz wystepowal problem z znalezieniem promieni nominalow, ktorych
+    zakres wartosic nie nachodzi na siebie """
+    thresh_srebny= cv2.adaptiveThreshold(gray_srebny, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C, cv2.THRESH_BINARY, 101,-10)
 
     #znalezienie zlotych monet
     circles = cv2.HoughCircles(gray_zloty, cv2.HOUGH_GRADIENT, 1, 50, param1=50, param2=30, minRadius=20, maxRadius=45)
@@ -150,7 +154,7 @@ def licz(obraz,obraz_zloty,obraz_srebny):
     #znalezienie srebnych monet
     circles1 = cv2.HoughCircles(thresh_srebny, cv2.HOUGH_GRADIENT, 1, 100, param1=300, param2=10, minRadius=25, maxRadius=45)
 
-    #tutaj rowniez wystupuje ten sam problem opisany juz wczesniej
+    #tutaj ten problem nie wystepuje, poniewaz na kazdym zdjeciu sa zlote monety
     #zliczanie sumy srebnych monet i detekcja na obrazie
     if circles1 is not None:
         circles1 = np.uint16(np.around(circles1))
