@@ -154,7 +154,7 @@ def licz(obraz,obraz_zloty,obraz_srebny):
     #znalezienie srebnych monet
     circles1 = cv2.HoughCircles(thresh_srebny, cv2.HOUGH_GRADIENT, 1, 100, param1=300, param2=10, minRadius=25, maxRadius=45)
 
-    #tutaj ten problem nie wystepuje, poniewaz na kazdym zdjeciu sa zlote monety
+    #tutaj ten problem nie wystepuje, poniewaz na kazdym zdjeciu sa srebne monety
     #zliczanie sumy srebnych monet i detekcja na obrazie
     if circles1 is not None:
         circles1 = np.uint16(np.around(circles1))
