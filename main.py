@@ -54,7 +54,7 @@ def wszyskieNominaly(obraz):
     obraz[mask!=255]=0
     return obraz
 "---------------------------------------------------------------------------------------------------------------------"
-#funkcja zwraca 2 obrazy: 1-zlote monety, 2-srebne monety. Oba na czarnym tle
+#funkcja zwraca 2 obrazy: 1-zlote monety, 2-srebrne monety. Oba na czarnym tle
 #argumentem wejsciowym jest obraz z monetami gdzie tlo czarne
 def rodziel(obraz):
     # wartosci do maski dla zlotych monet, dobrane eksperymentalnie
@@ -84,25 +84,25 @@ def rodziel(obraz):
     https://docs.opencv.org/3.4/d4/d70/tutorial_hough_circle.html"""
     if circles is not None:
         circles= np.uint16(np.around(circles))  # potrzebne bo kod nie dziala
-        # jesli tak to nastapi rysowanie kołek czarnych kolek w miejscje znalezionych zlotych monet
+        # jesli tak to nastapi rysowanie kołek czarnych w miejscje znalezionych zlotych monet
         for i in circles[0, :]:
             obraz = cv2.circle(obraz, (i[0], i[1]), 46, 0, -1)
 
     return obraz_zloty, obraz
 "---------------------------------------------------------------------------------------------------------------------"
 #funkcja zwraca obraz z wykrytymi nominalami i sume nominalow wszystkich monet
-#argumentem wejsciowym jest obraz z oryginalny, obraz z zlotymi monetami i obraz z srebnymi monetami na czarnym tle
-def licz(obraz,obraz_zloty,obraz_srebny):
+#argumentem wejsciowym jest obraz z oryginalny, obraz z zlotymi monetami i obraz z srebrnymi monetami na czarnym tle
+def licz(obraz,obraz_zloty,obraz_srebrny):
     #zliczona wartosc monet na zdjeciu
     suma=0
 
     # konwersja na skale szarosci
-    gray_srebny = cv2.cvtColor(obraz_srebny, cv2.COLOR_BGR2GRAY)
+    gray_srebrny = cv2.cvtColor(obraz_srebrny, cv2.COLOR_BGR2GRAY)
     gray_zloty = cv2.cvtColor(obraz_zloty, cv2.COLOR_BGR2GRAY)
 
     """dodatkowo zastosowalem adaptive thresh poniewaz wystepowal problem z znalezieniem promieni nominalow, ktorych
     zakres wartosic nie nachodzi na siebie """
-    thresh_srebny= cv2.adaptiveThreshold(gray_srebny, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C, cv2.THRESH_BINARY, 101,-10)
+    thresh_srebrny= cv2.adaptiveThreshold(gray_srebrny, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C, cv2.THRESH_BINARY, 101,-10)
 
     #znalezienie zlotych monet
     circles = cv2.HoughCircles(gray_zloty, cv2.HOUGH_GRADIENT, 1, 50, param1=50, param2=30, minRadius=20, maxRadius=45)
@@ -153,11 +153,11 @@ def licz(obraz,obraz_zloty,obraz_srebny):
                 #specjalnie inne dla 5 zl
                 cv2.circle(obraz, (i[0], i[1]), 44, (0, 255, 0), 2)
 
-    #znalezienie srebnych monet
-    circles1 = cv2.HoughCircles(thresh_srebny, cv2.HOUGH_GRADIENT, 1, 100, param1=300, param2=10, minRadius=25, maxRadius=45)
+    #znalezienie srebrnych monet
+    circles1 = cv2.HoughCircles(thresh_srebrny, cv2.HOUGH_GRADIENT, 1, 100, param1=300, param2=10, minRadius=25, maxRadius=45)
 
-    #tutaj ten problem nie wystepuje, poniewaz na kazdym zdjeciu sa srebne monety
-    #zliczanie sumy srebnych monet i detekcja na obrazie
+    #tutaj ten problem nie wystepuje, poniewaz na kazdym zdjeciu sa srebrne monety
+    #zliczanie sumy srebrnych monet i detekcja na obrazie
     if circles1 is not None:
         circles1 = np.uint16(np.around(circles1))
         for i in circles1[0, :]:
@@ -201,11 +201,11 @@ for i in range(3):
     wszystkie=wszyskieNominaly(obraz.copy())
     drukujObraz("wszystkie nomianly",wszystkie)
 
-    obraz_zloty,obraz_srebny=rodziel(wszystkie.copy())
+    obraz_zloty,obraz_srebrny=rodziel(wszystkie.copy())
     drukujObraz("tylko zlote",obraz_zloty)
-    drukujObraz("tylko srebne",obraz_srebny)
+    drukujObraz("tylko srebrne",obraz_srebrny)
 
-    obraz_wykryty,suma=licz(obraz.copy(),obraz_zloty.copy(),obraz_srebny.copy())
+    obraz_wykryty,suma=licz(obraz.copy(),obraz_zloty.copy(),obraz_srebrny.copy())
     drukujObraz("wykryte nominaly",obraz_wykryty)
     print(suma,"zł")
 "---------------------------------------------------------------------------------------------------------------------"
