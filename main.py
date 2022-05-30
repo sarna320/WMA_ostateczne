@@ -205,7 +205,7 @@ for i in range(3):
 
     obraz_wykryty,suma=licz(obraz.copy(),obraz_zloty.copy(),obraz_srebny.copy())
     drukujObraz("wykryte nominaly",obraz_wykryty)
-    print(suma)
+    print(suma,"zł")
 "---------------------------------------------------------------------------------------------------------------------"
 
 
