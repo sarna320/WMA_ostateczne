@@ -7,9 +7,9 @@ import urllib.request
 #argumentem wejsciowym jest numer linku
 def zwrocObrazGithub(i):
     # url zdjec z githuba
-    url = ["https://github.com/sarna320/projekt_WMA/blob/master/mix.jpg?raw=true",
-           "https://github.com/sarna320/projekt_WMA/blob/master/mix2.jpg?raw=true",
-           "https://github.com/sarna320/projekt_WMA/blob/master/srebne.jpg?raw=true"]
+    url = ["https://github.com/sarna320/WMA_ostateczne/blob/dziala/mix.jpg?raw=true",
+           "https://github.com/sarna320/WMA_ostateczne/blob/dziala/mix2.jpg?raw=true",
+           "https://github.com/sarna320/WMA_ostateczne/blob/dziala/srebne.jpg?raw=true"]
 
     # wgranie zdjeciaa
     url_response = urllib.request.urlopen(url[i])
